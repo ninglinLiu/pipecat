@@ -19,8 +19,8 @@ from typing import Any, Literal, Optional, Union
 from loguru import logger
 from pydantic import BaseModel, Field
 
-from pipecat.adapters.base_llm_adapter import LLMContextConversionError
-from pipecat.adapters.services.anthropic_adapter import (
+from pipecat.adapters.llm.base_llm_adapter import LLMContextConversionError
+from pipecat.adapters.llm.services.anthropic_adapter import (
     AnthropicCacheTTL,
     AnthropicLLMAdapter,
     AnthropicLLMInvocationParams,
@@ -501,6 +501,7 @@ class AnthropicLLMService(LLMService[AnthropicLLMAdapter]):
         messages = invocation_params["messages"]
         system = invocation_params["system"]
         tools = invocation_params["tools"]
+        tool_choice = invocation_params["tool_choice"]
 
         # Build params using the same method as streaming completions
         params = {
@@ -510,6 +511,7 @@ class AnthropicLLMService(LLMService[AnthropicLLMAdapter]):
             "messages": messages,
             "system": system,
             "tools": tools,
+            "tool_choice": tool_choice,
             "betas": ["interleaved-thinking-2025-05-14"],
         }
         thinking = assert_given(self._settings.thinking)
